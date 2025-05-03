@@ -46,7 +46,7 @@ export const useTemplateStore = defineStore('template', () => {
       isCustom: false
     }
   ])
-  
+
   const activeTemplate = ref<Template>({
     id: nanoid(),
     name: 'Untitled Template',
@@ -60,6 +60,15 @@ export const useTemplateStore = defineStore('template', () => {
       id: nanoid(),
       ...component
     }
+
+    // Find the maximum y value among existing components
+    const maxY = activeTemplate.value.components.reduce((max, comp) => {
+      return Math.max(max, comp.y + comp.h)
+    }, 0)
+
+    // Place the new component below existing ones
+    newComponent.y = maxY
+
     activeTemplate.value.components.push(newComponent)
     return newComponent.id
   }
@@ -67,9 +76,9 @@ export const useTemplateStore = defineStore('template', () => {
   const updateComponent = (id: string, data: Partial<TemplateComponent>) => {
     const index = activeTemplate.value.components.findIndex(comp => comp.id === id)
     if (index !== -1) {
-      activeTemplate.value.components[index] = { 
-        ...activeTemplate.value.components[index], 
-        ...data 
+      activeTemplate.value.components[index] = {
+        ...activeTemplate.value.components[index],
+        ...data
       }
     }
   }
@@ -80,7 +89,7 @@ export const useTemplateStore = defineStore('template', () => {
 
   const saveTemplate = () => {
     const existingIndex = templates.value.findIndex(t => t.id === activeTemplate.value.id)
-    
+
     if (existingIndex !== -1) {
       templates.value[existingIndex] = { ...activeTemplate.value }
     } else {

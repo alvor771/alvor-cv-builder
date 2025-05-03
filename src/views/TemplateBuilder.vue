@@ -6,10 +6,10 @@ import TemplatePreview from '../components/template-builder/TemplatePreview.vue'
 import { useTemplateStore } from '../stores/templateStore'
 
 const templateStore = useTemplateStore()
-const activeView = ref('edit') // 'edit' or 'preview'
+const activeTab = ref('edit') // 'edit' or 'preview'
 
-const switchView = (view: string) => {
-  activeView.value = view
+const switchTab = (tab: string) => {
+  activeTab.value = tab
 }
 </script>
 
@@ -17,60 +17,54 @@ const switchView = (view: string) => {
   <div class="container mx-auto px-4 py-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
       <h1 class="text-3xl font-bold text-text-light mb-4 md:mb-0">Template Builder</h1>
-      
+
       <div class="flex space-x-4">
-        <button 
-          @click="switchView('edit')" 
-          class="btn"
-          :class="activeView === 'edit' ? 'btn-primary' : 'btn-outline'"
+        <button
+            @click="switchTab('edit')"
+            class="btn"
+            :class="activeTab === 'edit' ? 'btn-primary' : 'btn-outline'"
         >
-          Edit Mode
+          Editor
         </button>
-        <button 
-          @click="switchView('preview')" 
-          class="btn"
-          :class="activeView === 'preview' ? 'btn-primary' : 'btn-outline'"
+        <button
+            @click="switchTab('preview')"
+            class="btn"
+            :class="activeTab === 'preview' ? 'btn-primary' : 'btn-outline'"
         >
           Preview
         </button>
       </div>
     </div>
-    
-    <div v-if="activeView === 'edit'" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Editor Tab -->
+    <div v-if="activeTab === 'edit'" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Component Panel -->
-      <div class="lg:col-span-2">
+      <div class="lg:col-span-1">
         <div class="card">
           <h2 class="text-xl font-medium text-text-light mb-6">Components</h2>
           <TemplateComponentPanel />
         </div>
       </div>
-      
+
       <!-- Canvas -->
-      <div class="lg:col-span-7">
+      <div class="lg:col-span-3">
         <div class="card">
           <h2 class="text-xl font-medium text-text-light mb-6">Canvas</h2>
           <TemplateCanvas />
         </div>
       </div>
-
-      <!-- Preview -->
-      <div class="lg:col-span-3">
-        <div class="card">
-          <h2 class="text-xl font-medium text-text-light mb-6">Preview</h2>
-          <TemplatePreview />
-        </div>
-      </div>
     </div>
-    
+
+    <!-- Preview Tab -->
     <div v-else class="card">
       <h2 class="text-xl font-medium text-text-light mb-6">Template Preview</h2>
       <TemplatePreview />
-      
+
       <!-- Export Buttons -->
       <div class="mt-6 flex flex-wrap gap-4">
-        <button 
-          @click="templateStore.saveTemplate()" 
-          class="btn btn-primary"
+        <button
+            @click="templateStore.saveTemplate()"
+            class="btn btn-primary"
         >
           <span class="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

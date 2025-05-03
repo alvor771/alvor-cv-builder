@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useTemplateStore } from '../../stores/templateStore'
 import { GridLayout, GridItem } from 'vue3-grid-layout'
 import CanvasComponent from './CanvasComponent.vue'
@@ -16,6 +16,11 @@ const isResizing = ref(false)
 onMounted(() => {
   updateLayout()
 })
+
+// Watch for changes in components
+watch(() => activeTemplate.components, () => {
+  updateLayout()
+}, { deep: true })
 
 // Update the layout based on components
 const updateLayout = () => {
@@ -43,6 +48,7 @@ const onLayoutUpdated = (newLayout) => {
       })
     }
   })
+  updateLayout()
 }
 
 // Drag state handlers
@@ -74,37 +80,38 @@ const onResizeEnd = () => {
       </svg>
       <p class="text-lg">Drag components here to build your template</p>
     </div>
-    
-    <grid-layout
-      v-if="activeTemplate.components.length > 0"
-      :layout="layout"
-      :col-num="12"
-      :row-height="30"
-      :is-draggable="true"
-      :is-resizable="true"
-      :margin="[5, 5]"
-      :use-css-transforms="true"
-      @layout-updated="onLayoutUpdated"
-      @drag-start="onDragStart"
-      @drag-end="onDragEnd"
-      @resize-start="onResizeStart"
-      @resize-end="onResizeEnd"
+
+    <GridLayout
+        v-else
+        v-model:layout="layout"
+        :col-num="12"
+        :row-height="30"
+        :is-draggable="true"
+        :is-resizable="true"
+        :vertical-compact="true"
+        :use-css-transforms="true"
+        :margin="[5, 5]"
+        @layout-updated="onLayoutUpdated"
+        @drag-start="onDragStart"
+        @drag-end="onDragEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
     >
-      <grid-item
-        v-for="item in layout"
-        :key="item.i"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        :i="item.i"
+      <GridItem
+          v-for="item in layout"
+          :key="item.i"
+          :x="item.x"
+          :y="item.y"
+          :w="item.w"
+          :h="item.h"
+          :i="item.i"
       >
-        <CanvasComponent 
-          :component-id="item.i" 
-          :is-dragging="isDragging" 
-          :is-resizing="isResizing" 
+        <CanvasComponent
+            :component-id="item.i"
+            :is-dragging="isDragging"
+            :is-resizing="isResizing"
         />
-      </grid-item>
-    </grid-layout>
+      </GridItem>
+    </GridLayout>
   </div>
 </template>
