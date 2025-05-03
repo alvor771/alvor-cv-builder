@@ -1,0 +1,22 @@
+{
+  "title": "Формируй своё будущее",
+  "welcome": "Добро пожаловать в Layvio",
+  "create_cv": "Создай своё резюме",
+  "form": {
+    "full_name": "Full Name",
+    "job_title": "Job Title",
+    "placeholder_name": "John Doe",
+    "placeholder_job": "Software Engineer",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "summary": "Summary",
+    "education": "Education",
+    "experience": "Experience",
+    "skills": "Skills",
+    "add": "Add",
+    "remove": "Remove",
+    "save": "Save",
+    "download": "Download"
+  }
+}
